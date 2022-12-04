@@ -1,0 +1,29 @@
+server:
+  port: 8099
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  profiles:
+    active: @profiles.active@
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
+
+
+secure:
+  ignore:
+    requestVOs:
+      - method: "POST"
+        path: "/login"
+      - method: "GET"
+        path: "/dicts/type/{dictType}/items"
+
+
+logging:
+  file:
+    path: /var/logs
+  level:
+    root: info
+  pattern:
+    console: "%clr(%d{HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:%5p}) %clr(-){faint} %clr([%t]){faint} %clr(%-40logger{39}){cyan}[%line]%clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"

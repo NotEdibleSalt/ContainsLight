@@ -1,0 +1,44 @@
+before_script:
+  - export IMAGE_FULL_NAME=contains-light
+
+stages:
+  - compile
+  - build
+  - run
+variables:
+  PROJECT: "ContainsLight"
+  MAVEN_REPO: "/.m2"
+job_compile:
+  image: mvn-base:latest
+  stage: compile
+  allow_failure: false
+  script:
+    - cp /config/application-local.yml ./src/main/resources/application-local.yml
+    - mvn -Dmaven.repo.local=$MAVEN_REPO clean package -P local -Dmaven.test.skip=true
+  artifacts:
+    name: $PROJECT
+    expire_in: 7 days
+    paths:
+      - target/*.jar
+  only:
+    - main
+job_build:
+  image: docker:stable
+  stage: build
+  script:
+    - docker build -t $IMAGE_FULL_NAME .
+    - rm -rf target
+  only:
+    - main
+job_run:
+  image: docker:stable
+  stage: run
+  script:
+    - CONTAINER_NAME=$(docker ps -aq --filter name=^/$PROJECT$)
+    - echo $CONTAINER_NAME
+    - if [[ -n "$CONTAINER_NAME" ]]; then
+      docker rm -f $CONTAINER_NAME;
+      fi
+    - docker run -d --name $PROJECT -p 8099:8099 $IMAGE_FULL_NAME
+  only:
+    - main

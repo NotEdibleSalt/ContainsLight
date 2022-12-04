@@ -1,0 +1,14 @@
+spring:
+  r2dbc:
+    url: r2dbc:mysql://127.0.0.1:3306/salt?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: username
+    password: password
+    pool:
+      enabled: true
+      max-size: 20
+      initial-size: 5
+      validation-query: select 1
+  redis:
+    host: 127.0.0.1
+    password: password
+    port: 6379
