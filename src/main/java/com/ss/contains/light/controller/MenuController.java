@@ -2,12 +2,15 @@ package com.ss.contains.light.controller;
 
 import com.ss.contains.light.common.MessageCommon;
 import com.ss.contains.light.common.R;
+import com.ss.contains.light.config.security.AdminUserDetails;
+import com.ss.contains.light.config.security.AuthUtil;
 import com.ss.contains.light.controller.dto.command.SaveMenuDTO;
 import com.ss.contains.light.controller.ro.TreeDataRO;
 import com.ss.contains.light.dos.MenuDO;
 import com.ss.contains.light.service.MenuService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -71,17 +74,6 @@ public class MenuController {
     public Mono<R<Object>> delMenu(@PathVariable("menuId") String menuId) {
 
         return menuService.delMenu(menuId).thenReturn(R.message(MessageCommon.DEL_SUCCESS));
-    }
-
-    /**
-     * 查询菜单树
-     *
-     * @return reactor.core.publisher.Mono<java.util.List<com.ss.contains.light.controller.ro.TreeDataRO>>
-     */
-    @GetMapping("tree")
-    public Mono<List<TreeDataRO>> getMenuTree(){
-
-        return menuService.getMenuTree();
     }
 
 

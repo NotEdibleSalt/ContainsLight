@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.ss.contains.light.base.DOBase;
 import com.ss.contains.light.common.exception.Ex;
+import com.ss.contains.light.config.security.AdminUserDetails;
 import com.ss.contains.light.controller.dto.command.SaveMenuDTO;
 import com.ss.contains.light.controller.ro.TreeDataRO;
 import com.ss.contains.light.dos.MenuDO;
@@ -92,44 +93,6 @@ public class MenuServiceImpl implements MenuService {
                 })
                 .then(menuRepo.logicDelete(menuId));
 
-    }
-
-    @Override
-    public Mono<List<TreeDataRO>> getMenuTree() {
-
-         return menuRepo.findAll()
-                .filter(DOBase::notDel)
-                .collectList()
-                .map(menuDOS -> {
-
-                    // 将不是顶级菜单的所有菜单按照上级id分组
-                    Map<String, List<MenuDO>> collect = menuDOS.stream()
-                            .filter(menuDO -> StrUtil.isNotBlank(menuDO.getParentId()))
-                            .collect(Collectors.groupingBy(MenuDO::getParentId));
-
-                    return menuDOS.stream()
-                            .filter(menuDO -> StrUtil.isBlank(menuDO.getParentId()))
-                            .sorted(Comparator.comparing(MenuDO::getSortNumber))
-                            .map(menuDO -> new TreeDataRO(menuDO.getId(), menuDO.getName()))
-                            .map(treeDataRO -> {
-
-                                if (ObjectUtil.isEmpty(collect)){
-                                    return treeDataRO;
-                                }
-
-                                List<TreeDataRO> children = collect.get(treeDataRO.getKey())
-                                        .stream()
-                                        .sorted(Comparator.comparing(MenuDO::getSortNumber))
-                                        .map(menuDO -> new TreeDataRO(menuDO.getId(), menuDO.getName()))
-                                        .collect(Collectors.toList());
-
-                                treeDataRO.setChildren(children);
-
-                                return treeDataRO;
-                            })
-                            .collect(Collectors.toList());
-
-                });
     }
 
 

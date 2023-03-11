@@ -1,5 +1,6 @@
 package com.ss.contains.light.service;
 
+import com.ss.contains.light.config.security.AdminUserDetails;
 import com.ss.contains.light.controller.dto.command.SaveMenuDTO;
 import com.ss.contains.light.controller.ro.TreeDataRO;
 import com.ss.contains.light.dos.MenuDO;
@@ -52,13 +53,6 @@ public interface MenuService {
      */
     Mono<MenuDO> delMenu(String menuId);
 
-
-    /**
-     * 查询菜单树
-     *
-     * @return reactor.core.publisher.Mono<java.util.List<com.ss.contains.light.controller.ro.TreeDataRO>>
-     */
-    Mono<List<TreeDataRO>> getMenuTree();
 
     Flux<MenuDO> getAllMenus();
 

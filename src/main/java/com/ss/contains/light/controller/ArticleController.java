@@ -75,19 +75,6 @@ public class ArticleController {
         return articleService.updateArticle(articleId, saveArticleDTO);
     }
 
-    /**
-     * 保存文章类型和简介
-     *
-     * @param articleId      文章id
-     * @param saveArticleTypeAndIntroductionApiDTO
-     * @return reactor.core.publisher.Mono<com.ss.contains.light.dos.ArticleDO>
-     */
-    @PatchMapping("{articleId}")
-    public Mono<ArticleDO> saveArticleTypeAndIntroductionApi(@PathVariable("articleId") String articleId,
-                                                             @RequestBody SaveArticleTypeAndIntroductionApiDTO saveArticleTypeAndIntroductionApiDTO) {
-
-        return articleService.saveArticleTypeAndIntroductionApi(articleId, saveArticleTypeAndIntroductionApiDTO);
-    }
 
     /**
      * 发布文章
@@ -96,9 +83,9 @@ public class ArticleController {
      * @return reactor.core.publisher.Mono<com.ss.contains.light.common.R>
      */
     @PutMapping("{articleId}/publish")
-    public Mono<R> publishArticle(@PathVariable("articleId") String articleId) {
+    public Mono<R> publishArticle(@PathVariable("articleId") String articleId, @RequestBody SaveArticleTypeAndIntroductionApiDTO saveArticleTypeAndIntroductionApiDTO) {
 
-        return articleService.publishArticle(articleId).thenReturn(R.success());
+        return articleService.publishArticle(articleId, saveArticleTypeAndIntroductionApiDTO).thenReturn(R.success());
     }
 
     /**

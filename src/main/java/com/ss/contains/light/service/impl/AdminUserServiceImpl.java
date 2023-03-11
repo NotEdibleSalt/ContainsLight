@@ -1,6 +1,7 @@
 package com.ss.contains.light.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
+import com.ss.contains.light.base.DOBase;
 import com.ss.contains.light.common.paging.PagingResult;
 import com.ss.contains.light.config.security.AdminUserDetails;
 import com.ss.contains.light.config.security.AuthUtil;
@@ -8,6 +9,7 @@ import com.ss.contains.light.controller.dto.command.AddAdminUserDTO;
 import com.ss.contains.light.controller.dto.command.UpdateAdminUserDTO;
 import com.ss.contains.light.controller.dto.query.AdminUserPagingQuery;
 import com.ss.contains.light.controller.ro.AdminUserPagingRO;
+import com.ss.contains.light.controller.ro.TreeDataRO;
 import com.ss.contains.light.dos.*;
 import com.ss.contains.light.repository.AccountRepo;
 import com.ss.contains.light.repository.AdminUserRepo;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -173,8 +176,16 @@ public class AdminUserServiceImpl implements AdminUserService {
         return roleService.getAccountAllRole(adminUserDetails.getId())
                 .map(RoleAccountDO::getRoleId)
                 .flatMap(roleMenuService::getRoleAssociatedMenus)
-                .map(roleMenuDO -> roleMenuDO.getMenuId())
+                .map(RoleMenuDO::getMenuId)
                 .flatMap(menuService::getMenuById);
 
+    }
+
+    @Override
+    public Mono<List<TreeDataRO>> getAdminMenuTree(AdminUserDetails adminUserDetails) {
+
+        return getUserAllMenu(adminUserDetails)
+                .collectList()
+                .map(TreeDataRO::from);
     }
 }

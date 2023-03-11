@@ -14,10 +14,7 @@ public class AESUtil {
     public static String decrypt(String data) {
 
         AES aes = new AES(Mode.ECB, Padding.ZeroPadding, key.getBytes());
-        String str = aes.decryptStr(data);
-
-        return str;
-
+        return aes.decryptStr(data);
     }
 
 

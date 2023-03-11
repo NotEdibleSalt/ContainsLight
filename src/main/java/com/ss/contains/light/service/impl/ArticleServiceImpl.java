@@ -1,6 +1,7 @@
 package com.ss.contains.light.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.ss.contains.light.common.exception.Ex;
 import com.ss.contains.light.common.paging.PagingResult;
 import com.ss.contains.light.common.paging.TemplateFunction;
 import com.ss.contains.light.controller.dto.command.SaveArticleDTO;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -91,9 +93,18 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Mono<ArticleDO> publishArticle(String articleId) {
+    public Mono<ArticleDO> publishArticle(String articleId, SaveArticleTypeAndIntroductionApiDTO saveArticleTypeAndIntroductionApiDTO) {
 
         return articleRepo.findById(articleId)
+                .map(articleDO -> {
+                    if (Objects.isNull(saveArticleTypeAndIntroductionApiDTO.getArticleType())){
+                        throw new Ex("请选择文章类型后发布");
+                    }
+                    articleDO.setArticleType(saveArticleTypeAndIntroductionApiDTO.getArticleType());
+                    articleDO.setIntroduction(saveArticleTypeAndIntroductionApiDTO.getIntroduction());
+
+                    return articleDO;
+                })
                 .map(ArticleDO::publish)
                 .flatMap(articleRepo::save);
     }

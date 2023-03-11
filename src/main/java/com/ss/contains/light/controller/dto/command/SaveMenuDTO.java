@@ -22,7 +22,7 @@ public class SaveMenuDTO {
      * 菜单类型
      */
     @NotBlank(message = "菜单类型不能为空")
-    private String type;
+    private String menuType;
 
     /**
      * 菜单名称
@@ -67,7 +67,7 @@ public class SaveMenuDTO {
 
         MenuDO menuDO = new MenuDO();
         menuDO.setParentId(this.getParentId());
-        menuDO.setType(this.getType());
+        menuDO.setMenuType(this.getMenuType());
         menuDO.setName(this.getName());
         menuDO.setPath(this.getPath());
         menuDO.setDescription(this.getDescription());

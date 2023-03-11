@@ -29,8 +29,7 @@ public class LoginController {
     @PostMapping("login")
     public Mono<String> login(@RequestBody LoginDTO loginDTO) {
 
-        Mono<String> token = loginService.token(loginDTO);
-        return token;
+        return loginService.token(loginDTO);
     }
 
 

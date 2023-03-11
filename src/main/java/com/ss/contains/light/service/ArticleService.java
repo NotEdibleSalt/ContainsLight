@@ -46,23 +46,14 @@ public interface ArticleService {
     Mono<ArticleDO> updateArticle(String articleId, SaveArticleDTO saveArticleDTO);
 
     /**
-     * 保存文章类型和简介
-     *
-     * @param articleId      文章id
-     * @param saveArticleTypeAndIntroductionApiDTO
-     * @return reactor.core.publisher.Mono<com.ss.contains.light.dos.ArticleDO>
-     */
-    Mono<ArticleDO> saveArticleTypeAndIntroductionApi(String articleId,
-                                                      SaveArticleTypeAndIntroductionApiDTO saveArticleTypeAndIntroductionApiDTO);
-
-
-    /**
      * 发布文章
      *
-     * @param articleId 文章id
+     * @param articleId                            文章id
+     * @param saveArticleTypeAndIntroductionApiDTO
+     *
      * @return reactor.core.publisher.Mono<com.ss.contains.light.dos.ArticleDO>
      */
-    Mono<ArticleDO> publishArticle(String articleId);
+    Mono<ArticleDO> publishArticle(String articleId, SaveArticleTypeAndIntroductionApiDTO saveArticleTypeAndIntroductionApiDTO);
 
     /**
      * 下架文章

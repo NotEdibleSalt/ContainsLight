@@ -8,6 +8,7 @@ import com.ss.contains.light.controller.dto.command.AddAdminUserDTO;
 import com.ss.contains.light.controller.dto.command.UpdateAdminUserDTO;
 import com.ss.contains.light.controller.dto.query.AdminUserPagingQuery;
 import com.ss.contains.light.controller.ro.AdminUserPagingRO;
+import com.ss.contains.light.controller.ro.TreeDataRO;
 import com.ss.contains.light.dos.AdminUserDO;
 import com.ss.contains.light.dos.MenuDO;
 import com.ss.contains.light.service.AdminUserService;
@@ -15,6 +16,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -27,7 +30,8 @@ public class AdminUserController {
     /**
      * 条件查询管理员用户
      *
-     * @param adminUserPagingQuery
+     * @param adminUserPagingQuery 查询参数
+     *
      * @return reactor.core.publisher.Mono<com.ss.contains.light.common.paging.PagingResult < com.ss.contains.light.dos.AdminUserDO>>
      * @date 2022-5-2
      */
@@ -41,6 +45,7 @@ public class AdminUserController {
      * 查询管理员用户信息
      *
      * @param id 管理员用户id
+     *
      * @return reactor.core.publisher.Mono<com.ss.contains.light.dos.AdminUserDO>
      **/
     @GetMapping("{id}")
@@ -53,6 +58,7 @@ public class AdminUserController {
      * 新增管理员用户
      *
      * @param addAdminUserDTO 新增管理员用户DTO
+     *
      * @return reactor.core.publisher.Mono<com.ss.contains.light.dos.AdminUserDO>
      **/
     @PostMapping("")
@@ -66,6 +72,7 @@ public class AdminUserController {
      *
      * @param id                 管理员用户id
      * @param updateAdminUserDTO 更新管理员用户信息DTO
+     *
      * @return reactor.core.publisher.Mono<com.ss.contains.light.dos.AdminUserDO>
      * @date 2022-5-2
      */
@@ -79,6 +86,7 @@ public class AdminUserController {
      * 删除管理员用户
      *
      * @param id 管理员用户id
+     *
      * @return com.ss.contains.light.common.R
      * @date 2022-5-2
      */
@@ -94,13 +102,23 @@ public class AdminUserController {
      * @return reactor.core.publisher.Flux<com.ss.contains.light.dos.MenuDO>
      */
     @GetMapping("menus")
-    public Flux<MenuDO> getUserAllMenu(){
+    public Flux<MenuDO> getUserAllMenu() {
 
-        Flux<MenuDO> menuDOFlux = AuthUtil.getLoginUserInfo()
+        return AuthUtil.getLoginUserInfo()
                 .flatMapMany(adminUserService::getUserAllMenu);
 
-        return menuDOFlux;
+    }
 
+    /**
+     * 查询用户的菜单树
+     *
+     * @return reactor.core.publisher.Mono<java.util.List < com.ss.contains.light.controller.ro.TreeDataRO>>
+     */
+    @GetMapping("menus/tree")
+    public Mono<List<TreeDataRO>> getAdminMenuTree() {
+
+        return AuthUtil.getLoginUserInfo()
+                .flatMap(adminUserService::getAdminMenuTree);
     }
 
 

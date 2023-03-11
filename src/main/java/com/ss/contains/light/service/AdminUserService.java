@@ -6,6 +6,7 @@ import com.ss.contains.light.controller.dto.command.AddAdminUserDTO;
 import com.ss.contains.light.controller.dto.command.UpdateAdminUserDTO;
 import com.ss.contains.light.controller.dto.query.AdminUserPagingQuery;
 import com.ss.contains.light.controller.ro.AdminUserPagingRO;
+import com.ss.contains.light.controller.ro.TreeDataRO;
 import com.ss.contains.light.dos.AccountDO;
 import com.ss.contains.light.dos.AdminUserDO;
 import com.ss.contains.light.dos.MenuDO;
@@ -14,6 +15,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.util.List;
 
 public interface AdminUserService {
 
@@ -76,4 +78,12 @@ public interface AdminUserService {
      * @return reactor.core.publisher.Flux<com.ss.contains.light.dos.MenuDO>
      */
     Flux<MenuDO> getUserAllMenu(AdminUserDetails adminUserDetails);
+
+    /**
+     * 查询菜单树
+     * @param adminUserDetails 用户详情
+     *
+     * @return reactor.core.publisher.Mono<java.util.List<com.ss.contains.light.controller.ro.TreeDataRO>>
+     */
+    Mono<List<TreeDataRO>> getAdminMenuTree(AdminUserDetails adminUserDetails);
 }

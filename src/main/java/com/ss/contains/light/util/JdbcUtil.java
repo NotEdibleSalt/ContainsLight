@@ -286,6 +286,15 @@ public class JdbcUtil {
         return this;
     }
 
+    public JdbcUtil dynamicAppendStrIn(String condition, String str) {
+
+        if (StrUtil.isNotEmpty(str)) {
+            String s1 = Arrays.stream(str.split(",")).map(s -> " '" + s + "'").collect(Collectors.joining(","));
+            this.sqlBuilder.append(" ").append(condition).append(" ( ").append(s1).append(" ) ");
+        }
+        return this;
+    }
+
     /**
      * 动态追加查询条件
      *
@@ -339,8 +348,17 @@ public class JdbcUtil {
     private void printSql() {
 
         try {
-            log.info("待执行sql: {}", this.sqlBuilder.toString());
-        } catch (Exception exception) {}
+            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+            StackTraceElement stackTrac = stackTrace[3];
+            String[] paths = stackTrac.getClassName().split("\\.");
+            String pos = paths[paths.length - 1] + "#" + stackTrac.getMethodName() + " " + stackTrac.getLineNumber();
+
+            log.info("-------- {} --------", pos);
+            log.info("{}", this.sqlBuilder.toString());
+            log.info("--------------------------------------------------------");
+        } catch (Exception exception) {
+            log.error("打印sql失败", exception);
+        }
 
     }
 }

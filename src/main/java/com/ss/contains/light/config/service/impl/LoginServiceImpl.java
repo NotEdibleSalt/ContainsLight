@@ -3,6 +3,7 @@ package com.ss.contains.light.config.service.impl;
 import com.ss.contains.light.config.security.AdminUserDetails;
 import com.ss.contains.light.config.service.LoginService;
 import com.ss.contains.light.controller.dto.command.LoginDTO;
+import com.ss.contains.light.dos.LoginRecordDO;
 import com.ss.contains.light.service.LoginRecordService;
 import com.ss.contains.light.util.JWTUtil;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,6 @@ public class LoginServiceImpl implements LoginService {
                 .map(AdminUserDetails.class::cast)
                 .doOnNext(userDetails -> userDetails.checkPassword(loginDTO.getPassword()))
                 .map(JWTUtil::generateToken)
-                .doOnNext(token -> loginRecordService.saveLoginRecord(token).subscribe());
+                .flatMap(token -> loginRecordService.saveLoginRecord(token).thenReturn(token));
     }
 }

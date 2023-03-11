@@ -37,7 +37,7 @@ public class MenuDO extends DOBase implements Serializable {
     /**
      * 菜单类型
      */
-    private String type;
+    private String menuType;
 
     /**
      * 菜单名称
